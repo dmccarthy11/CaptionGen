@@ -1,7 +1,5 @@
 import torch
-from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
-import numpy as np
 
 def load_clip():
     """
