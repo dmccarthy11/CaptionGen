@@ -1,0 +1,17 @@
+# Ignore Streamlit secrets
+CaptionGen/.streamlit/secrets.toml
+
+# Ignore others
+__pycache__/
+*__pycache__/
+model/
+.venv/
+blip*/
+checkpoint*/
+data/
+gpt2*/
+app.py
+blip2.py
+inference.py
+InstagramDataset.py
+test.py

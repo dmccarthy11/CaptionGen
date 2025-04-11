@@ -1,6 +1,0 @@
-# Ignore Streamlit secrets
-.streamlit/secrets.toml
-
-# Ignore others
-__pycache__/
-model/
