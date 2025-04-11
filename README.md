@@ -36,6 +36,8 @@ CaptionGen leverages **Generative AI** in a two-step, multimodal pipeline:
 
 The application targets social media users who require tailored captions; small businesses and personal brands in particular.  The BLIP vision-language model will be paired with the GPT large-language model to offer a simplified solution for generating social media posts.  There are many use cases for social media, but today it serves as one of the best marketing channels for many businesses.  Different platforms require different types of content, and maintaining consistent and frequent content can be challenging.  Not only that, but being creative with social media posts is what onboards consumers onto a product or service.
 
+![CaptionGet-Architecture](./model_architecture.png)
+
 This project will offer custom social media content generation tailored to multiple platforms and styles.  By supplying an image with a platform type and predefined style, the application will output an appropriate caption.
 
 
