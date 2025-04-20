@@ -1,11 +1,16 @@
-from PIL import Image
-import streamlit as st
-from gpt4 import generate_caption, INSTAGRAM, TWITTER, FACEBOOK, ENGAGING, PROFESSIONAL, FUNNY
-from blip import load_blip, greedy_caption
-from clip import load_clip
-from gpt2 import load_gpt2, generate_gpt2_caption
-from oneshot import oneshot_captions
-from utils import clean_caption
+try:
+    from PIL import Image
+    import streamlit as st
+    from gpt4 import generate_caption, INSTAGRAM, TWITTER, FACEBOOK, ENGAGING, PROFESSIONAL, FUNNY
+    from blip import load_blip, greedy_caption
+    from clip import load_clip
+    from gpt2 import load_gpt2, generate_gpt2_caption
+    from oneshot import oneshot_captions
+    from utils import clean_caption
+except Exception as e:
+    import sys
+    print(f"Import failed: {e}", file=sys.stderr)
+    raise e
 
 st.set_page_config(page_title="CaptionGen App", layout="centered")
 
@@ -46,9 +51,14 @@ with st.sidebar:
     exclude_emojis = st.checkbox('Include emojis', value=True)
     exclude_hashtags = st.checkbox('Include hashtags', value=True)
 
-blip_model, blip_processor = load_blip()
-clip_model, clip_processor = load_clip()
-gpt2_model, gpt2_tokenizer = load_gpt2()
+try:
+    blip_model, blip_processor = load_blip()
+    clip_model, clip_processor = load_clip()
+    gpt2_model, gpt2_tokenizer = load_gpt2()
+except Exception as e:
+    import sys
+    print(f"Model loading failed: {e}", file=sys.stderr)
+    raise e
 
 # Set Caption components in main page
 st.write("Upload an image, and let CaptionGen generate a caption for it!")
