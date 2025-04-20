@@ -14,6 +14,10 @@ except Exception as e:
 
 st.set_page_config(page_title="CaptionGen App", layout="centered")
 
+# Block streamlit from tracking source changes to torch.classes
+import os
+os.environ["STREAMLIT_FILE_WATCHER_TYPE"] = "none"
+
 # Streamlit UI
 with st.sidebar:
     st.title("📸 CaptionGen")
