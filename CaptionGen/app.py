@@ -14,6 +14,19 @@ except Exception as e:
 
 st.set_page_config(page_title="CaptionGen App", layout="centered")
 
+# Stagger model loading to reduce streamlit crashing
+@st.cache_resource
+def get_blip():
+    return load_blip()
+
+@st.cache_resource
+def get_clip():
+    return load_clip()
+
+@st.cache_resource
+def get_gpt2():
+    return load_gpt2()
+
 # Block streamlit from tracking source changes to torch.classes
 import os
 os.environ["STREAMLIT_FILE_WATCHER_TYPE"] = "none"
