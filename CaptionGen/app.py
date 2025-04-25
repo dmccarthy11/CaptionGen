@@ -14,6 +14,12 @@ except Exception as e:
 
 st.set_page_config(page_title="CaptionGen App", layout="centered")
 
+st.markdown("""
+    <div style="background-color:#fff3cd; padding:10px 16px; border-left:6px solid #ffecb5; border-radius:5px; margin-bottom:20px">
+        <small><strong>NOTE:</strong> To remain a free Streamlit App, CLIP and GPT-2 models have been removed to reduce App crashes due to exceeding memory limits.  These can be run locally by cloning the repository.</small>
+    </div>
+""", unsafe_allow_html=True)
+
 # Stagger model loading to reduce streamlit crashing
 @st.cache_resource
 def get_blip():
@@ -31,6 +37,8 @@ def get_gpt2():
 import os
 os.environ["STREAMLIT_FILE_WATCHER_TYPE"] = "none"
 
+LOAD_ALL_MODELS = False
+
 # Streamlit UI
 with st.sidebar:
     st.title("📸 CaptionGen")
@@ -38,7 +46,10 @@ with st.sidebar:
     st.subheader('Style and parameters')
 
     # Model
-    model = st.sidebar.selectbox('Choose a Model', ['GPT-4o', 'GPT-2'], key='model')
+    if LOAD_ALL_MODELS:
+        model = st.sidebar.selectbox('Choose a Model', ['GPT-4o', 'GPT-2'], key='model')
+    else:
+        model = st.sidebar.selectbox('Choose a Model', ['GPT-4o'], key='model')
 
     # Platform
     platform = st.sidebar.selectbox('Choose a Platform', ['Instagram', 'X (Twitter)', 'Facebook'], key='platform')
@@ -64,14 +75,16 @@ with st.sidebar:
         top_p = st.slider('top_p', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
         max_output_tokens = st.slider('max_output_tokens', min_value=32, max_value=96, value=50, step=8)
 
-    enable_clip = st.checkbox('Enable one-shot captioning')
+    if LOAD_ALL_MODELS:
+        enable_clip = st.checkbox('Enable one-shot captioning')
     exclude_emojis = st.checkbox('Include emojis', value=True)
     exclude_hashtags = st.checkbox('Include hashtags', value=True)
 
 try:
     blip_model, blip_processor = load_blip()
-    clip_model, clip_processor = load_clip()
-    gpt2_model, gpt2_tokenizer = load_gpt2()
+    if LOAD_ALL_MODELS:
+        clip_model, clip_processor = load_clip()
+        gpt2_model, gpt2_tokenizer = load_gpt2()
 except Exception as e:
     import sys
     print(f"Model loading failed: {e}", file=sys.stderr)
@@ -96,7 +109,7 @@ if uploaded_image:
         # Generate short caption if one hasn't been generated already
         if st.button("Generate Caption 🔄"):
             st.write("⏳ Generating caption...")
-            if enable_clip:
+            if LOAD_ALL_MODELS and enable_clip:
                 st.session_state.short_caption = oneshot_captions(blip_model, blip_processor, clip_model, clip_processor, st.session_state.image)
             else:
                 st.session_state.short_caption = greedy_caption(blip_model, blip_processor, st.session_state.image)
